@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="ChatProject:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ChatProject_jar</output-path>
+    <root id="archive" name="ChatProject.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/../../NetBeansProjects/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="ChatProject" />
+    </root>
+  </artifact>
+</component>
