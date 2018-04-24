@@ -134,8 +134,12 @@ public class ClientUI extends JFrame implements Runnable {
                         client.setID(Integer.parseInt(message.split("/c/|/e/")[1]));
                         infoDisplay("Seccesfully connected to server! " + client.getID());
                     }else if(message.startsWith("/n/")){
-                        String txt = message.split("/n/|/e/")[1];
+                        String txt = message.substring(3);
+                        txt = txt.split("/e/")[0];
                         infoDisplay(txt);
+                    }else if(message.startsWith("/a/")){
+                        String txt = "/a/" + client.getID() + "/e/";
+                        updateInfo(txt,false);
                     }
                 }
             }

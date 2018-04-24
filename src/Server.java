@@ -9,6 +9,7 @@ import java.util.List;
 public class Server implements Runnable{
 
     private List<ServerClient> clients = new ArrayList<ServerClient>();
+    private List<Integer> clientResp = new ArrayList<Integer>();
 
     private int port;
     private DatagramSocket socket;
@@ -16,6 +17,7 @@ public class Server implements Runnable{
     private Thread thrdRun,thrdManage,thrdSend,thrdRecieve;
     private boolean running;
 
+    private final int MAX_ATTEMPTS = 5;
     public Server(int port){
         this.port = port;
         try {
@@ -38,7 +40,26 @@ public class Server implements Runnable{
             thrdManage = new Thread("Manage"){
                 public void run(){
                     while(running){     //Managing
-                    //System.out.println(clients.size());
+                    //System.out.println(clients.size()); // check current clients amount
+                       sendToAll("/a/ping");
+                        try {
+                            thrdManage.sleep(3000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        for(int i = 0;i <clients.size();i++){
+                           ServerClient sc = clients.get(i);
+                           if(!clientResp.contains(sc.getID())){
+                                if(sc.attempt >= MAX_ATTEMPTS){
+                                    disconnect(sc.getID(),false);
+                                }else{
+                                    sc.attempt++;
+                                }
+                           }else{
+                               clientResp.remove(new Integer(sc.getID()));
+                               sc.attempt = 0;
+                           }
+                       }
 
                     }
                 }
@@ -105,6 +126,8 @@ public class Server implements Runnable{
             }else if(line.startsWith("/d/")) {
                 String id = line.split("/d/|/e/")[1];
                 disconnect(Integer.parseInt(id),true);
+            }else if(line.startsWith("/a/")){
+                clientResp.add(Integer.parseInt(line.split("/a/|/e/")[1]));
             }else{
                 System.out.println(line);
             }
@@ -122,7 +145,6 @@ public class Server implements Runnable{
             if(status){
                 mess = "Client : " + cl.name.trim() + " , (" + cl.getID() + ") @ " + cl.address.toString() + " : " + cl.port + " disconnected";
             }else{
-
                 mess = "Client : " + cl.name.trim() + " , (" + cl.getID() + ") @ " + cl.address.toString() + " : " + cl.port + " timed out";
             }
             System.out.println(mess);
