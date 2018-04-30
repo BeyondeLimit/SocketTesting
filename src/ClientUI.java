@@ -60,7 +60,6 @@ public class ClientUI extends JFrame implements Runnable {
         WindowAdapter listen = new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 String disconnectID = "/d/" + client.getID() + "/e/";
-                System.out.println(disconnectID);
                 updateInfo(disconnectID,false);
                 running = false;
                 client.closingSocket();
@@ -125,9 +124,8 @@ public class ClientUI extends JFrame implements Runnable {
         if(isMess){
          message = client.getName() + " : " + message;
             try {
-                System.out.println(publicKey);
-                String newMessage = client.doEncryption(publicKey,message).toString();
-                String cryptedMessage = "/n/" + newMessage;
+                byte[] newMessage = client.doEncryption(publicKey,message);
+                String cryptedMessage = "/n/" + Base64.getEncoder().encodeToString(newMessage);
                 client.sendInfo(cryptedMessage.getBytes());
                 inputTxt.setText("");
                 inputTxt.requestFocusInWindow();
@@ -161,7 +159,6 @@ public class ClientUI extends JFrame implements Runnable {
                         try {
                             String key = message.substring(3);
                             key = key.trim();
-                            System.out.println(key.length());
                             byte[] generKey = Base64.getDecoder().decode(key);
                             KeyFactory kf = null;
                             kf = KeyFactory.getInstance("RSA");

@@ -98,7 +98,7 @@ public class Client {
             return encrypt;
         }
         public static byte[] encrypt(PublicKey publicKey,String message)throws  Exception{
-            Cipher chiper = Cipher.getInstance("RSA");
+            Cipher chiper = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             chiper.init(Cipher.ENCRYPT_MODE,publicKey);
             return chiper.doFinal(message.getBytes());
         }
