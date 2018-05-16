@@ -134,8 +134,6 @@ public class ClientUI extends JFrame implements Runnable {
             }
         }else {
             client.sendInfo(message.getBytes());
-            inputTxt.setText("");
-            inputTxt.requestFocusInWindow();
         }
 
     }
