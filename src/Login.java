@@ -13,6 +13,7 @@ public class Login {
     }
     private void CreateLoginWindow(){
         f = new JFrame("Login");
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JLabel lbName = new JLabel("Name:");
         JTextField txtName = new JTextField("Me");
         JLabel lbAddress = new JLabel("IP Address:");

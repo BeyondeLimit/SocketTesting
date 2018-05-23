@@ -2,6 +2,12 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 
 public class ClientUI extends JFrame implements Runnable {
 
@@ -13,6 +19,8 @@ public class ClientUI extends JFrame implements Runnable {
 
     private Thread listen,run;
     private boolean running = false;
+
+    public PublicKey publicKey;
 
     public ClientUI(String name,String address,int port){
         client = new Client(name,address,port);
@@ -52,7 +60,6 @@ public class ClientUI extends JFrame implements Runnable {
         WindowAdapter listen = new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 String disconnectID = "/d/" + client.getID() + "/e/";
-                System.out.println(disconnectID);
                 updateInfo(disconnectID,false);
                 running = false;
                 client.closingSocket();
@@ -107,7 +114,6 @@ public class ClientUI extends JFrame implements Runnable {
     }
 
     public void infoDisplay(String text){
-
         history.append(text+"\n\r");
     }
 
@@ -117,11 +123,18 @@ public class ClientUI extends JFrame implements Runnable {
         }
         if(isMess){
          message = client.getName() + " : " + message;
-         message = "/n/" + message;
+            try {
+                byte[] newMessage = client.doEncryption(publicKey,message);
+                String cryptedMessage = "/n/" + Base64.getEncoder().encodeToString(newMessage);
+                client.sendInfo(cryptedMessage.getBytes());
+                inputTxt.setText("");
+                inputTxt.requestFocusInWindow();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else {
+            client.sendInfo(message.getBytes());
         }
-        client.sendInfo(message.getBytes());
-        inputTxt.setText("");
-        inputTxt.requestFocusInWindow();
 
     }
 
@@ -140,6 +153,21 @@ public class ClientUI extends JFrame implements Runnable {
                     }else if(message.startsWith("/a/")){
                         String txt = "/a/" + client.getID() + "/e/";
                         updateInfo(txt,false);
+                    }else if(message.startsWith("/k/")){
+                        try {
+                            String key = message.substring(3);
+                            key = key.trim();
+                            byte[] generKey = Base64.getDecoder().decode(key);
+                            KeyFactory kf = null;
+                            kf = KeyFactory.getInstance("RSA");
+                            publicKey = kf.generatePublic(new X509EncodedKeySpec(generKey));
+                        } catch (NoSuchAlgorithmException e) {
+                            e.printStackTrace();
+                        } catch (InvalidKeySpecException e) {
+                            e.printStackTrace();
+                        }
+
+
                     }
                 }
             }

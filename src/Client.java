@@ -1,7 +1,9 @@
+import javax.crypto.Cipher;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.security.*;
 
 public class Client {
 
@@ -14,6 +16,7 @@ public class Client {
     private Thread thrdSend;
 
     private int ID = -1;
+
 
     public Client(String name, String address,int port){
         this.name = name;
@@ -84,5 +87,21 @@ public class Client {
             }
         }.start();
         }
+
+
+
+
+
+
+        public byte[] doEncryption(PublicKey pubKey,String message) throws Exception {
+            byte[] encrypt = encrypt(pubKey,message);
+            return encrypt;
+        }
+        public static byte[] encrypt(PublicKey publicKey,String message)throws  Exception{
+            Cipher chiper = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            chiper.init(Cipher.ENCRYPT_MODE,publicKey);
+            return chiper.doFinal(message.getBytes());
+        }
+
 
 }
