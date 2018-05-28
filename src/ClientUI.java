@@ -81,6 +81,8 @@ public class ClientUI extends JFrame implements Runnable {
                 panel2.updateUI();
             }
         });
+
+
         inputTxt.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {

@@ -1,28 +1,42 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class createServer extends JFrame{
-    public createServer() {
-        windowOpen();
-
+public class createServer {
+    public createServer(JFrame jFrame) {
+        windowOpen(jFrame);
     }
-    public void windowOpen(){
-        JFrame f = new JFrame("Creating Server");
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    public void windowOpen(JFrame jFrame){
+        JFrame frame = new JFrame("Creating Server");
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         JLabel label = new JLabel("Enter Server's name : ");
         JTextField txtFl = new JTextField();
-        JPanel pan = new JPanel();
-        JButton create = new JButton("Create");
+        JButton btnCreate = new JButton("Create");
+        JButton btnBack = new JButton("Back");
 
-        f.setMinimumSize(new Dimension(400,300));
-        pan.setVisible(true);
-        pan.setLayout(new BoxLayout(pan, BoxLayout.Y_AXIS));
-        f.setVisible(true);
-        f.setLocationRelativeTo(null);
+        frame.setMinimumSize(new Dimension(300,300));
+        txtFl.setMaximumSize(new Dimension(300,20));
+        txtFl.setLocation(100,100);
+        btnCreate.setLocation(50,50);
 
-        pan.add(label);
-        pan.add(txtFl);
-        f.add(pan);
+        frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+
+        frame.add(label);
+        frame.add(txtFl);
+        frame.add(btnCreate);
+        frame.add(btnBack);
+
+        btnBack.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jFrame.setEnabled(true);
+                frame.dispose();
+
+            }
+        });
 
     }
 }

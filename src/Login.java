@@ -12,8 +12,8 @@ public class Login {
         f.dispose();
         new ClientUI(name,address,port);
     }
-    private void createServer(){
-        new createServer();
+    private void newServer(){
+        new createServer(f);
     }
     private void CreateLoginWindow(){
         try{
@@ -63,13 +63,15 @@ public class Login {
                 login(name,address,port);
             }
         });
+        createServ.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                f.setEnabled(false);
+                newServer();
+            }
+        });
     }
     public static void main(String[] args){
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         new Login();
     }
 
