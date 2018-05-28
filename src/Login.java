@@ -1,9 +1,9 @@
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Login {
+
     private JFrame f;
     public Login(){
         CreateLoginWindow();
@@ -12,30 +12,37 @@ public class Login {
         f.dispose();
         new ClientUI(name,address,port);
     }
+    private void createServer(){
+        new createServer();
+    }
     private void CreateLoginWindow(){
+        try{
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
         f = new JFrame("Login");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        String servers[] = {"","Helsinki"};
         JLabel lbName = new JLabel("Name:");
         JTextField txtName = new JTextField("Me");
         JLabel lbAddress = new JLabel("IP Address:");
-        JTextField txtAddress = new JTextField("127.0.0.1");
-        JLabel lbPort = new JLabel("Port:");
-        JTextField txtPort = new JTextField("2552");
+        JComboBox txtAddress = new JComboBox(servers);
         JButton btnLogin = new JButton("Login");
+        JButton createServ = new JButton("Create Server");
         lbName.setBounds(80,10,50,50);
         lbAddress.setBounds(60,70,200,50);
-        lbPort.setBounds(80,130,50,50);
         txtName.setBounds(30,50,150,20);
         txtAddress.setBounds(30,120,150,20);
-        txtPort.setBounds(30,180,150,20);
-        btnLogin.setBounds(50,250,100,30);
+        btnLogin.setBounds(50,150,100,30);
+        createServ.setBounds(25,250,150,30);
         f.add(lbName);
         f.add(txtName);
         f.add(lbAddress);
         f.add(txtAddress);
-        f.add(lbPort);
-        f.add(txtPort);
         f.add(btnLogin);
+        f.add(createServ);
         f.setSize(200,350);
         f.setLayout(null);
         f.setVisible(true);
@@ -45,8 +52,14 @@ public class Login {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String name = txtName.getText();
-                String address = txtAddress.getText();
-                int port = Integer.parseInt(txtPort.getText());
+                String address = "";
+                int port = 2552;
+                if(txtAddress.getSelectedIndex() == 0){
+                address = "localhost";
+                }else if(txtAddress.getSelectedIndex() == 1){
+                        address = "95.216.138.187";
+                    }
+                System.out.println(address);
                 login(name,address,port);
             }
         });
@@ -59,6 +72,5 @@ public class Login {
         }
         new Login();
     }
-
 
 }

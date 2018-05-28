@@ -48,8 +48,6 @@ public class ClientUI extends JFrame implements Runnable {
         inputTxt = new JTextField();
         JButton btnSend = new JButton("send");
 
-        //((DefaultCaret) history.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-
         f.setMinimumSize(new Dimension(500,200));
         history.setLineWrap(true);
         scrlP.setPreferredSize(new Dimension(300,100));
@@ -68,7 +66,6 @@ public class ClientUI extends JFrame implements Runnable {
         panel1.setVisible(true);
         panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
         panel2.setLayout(new BoxLayout(panel2,BoxLayout.X_AXIS));
-        //panel1.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         panel2.setVisible(true);
         f.setVisible(true);
         f.setLocationRelativeTo(null);
